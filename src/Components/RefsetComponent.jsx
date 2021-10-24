@@ -20,16 +20,17 @@ export const RefsetComponent = class RefsetComponent extends React.Component {
         return (
             <div>
                 
-                <div>
                     <div className="form-group">
                         <select
-                            className="select"
-                            name="refsets"
-                            id="refsets"
-                            onChange={this.getRefset}
+                           defaultValue={"DEFAULT"}
+                           className="input-width select"
+                           // className="select"
+                           // name="refsets"
+                           // id="refsets"
+                           onChange={this.getRefset}
                         >
-                            <option value="" 
-                                    select="default">
+                            <option value="DEFAULT" 
+                                    select="default" disabled> 
                                     Please, select a refset:
                             </option>
                            
@@ -37,7 +38,6 @@ export const RefsetComponent = class RefsetComponent extends React.Component {
                             <option key={key} value={refsets.referenceSet}>{refsets.title}</option>) }
                         </select>
                     </div>
-                </div>
                 
             </div>
         );

@@ -11,14 +11,8 @@ export const HowToComponent = class HowToComponent extends React.Component {
   render() {
     return (
       <CollapsibleComponent>
-        <div
-          style={{ backgroundColor: "#00000000" }}
-          className="jumbotron text-center"
-        >
           <CollapsibleHead>
-            <div>
-              <h5>Documentation</h5>
-            </div>
+            Documentation
           </CollapsibleHead>
 
           <CollapsibleContent>
@@ -62,7 +56,6 @@ export const HowToComponent = class HowToComponent extends React.Component {
               </h5>
             </div>
           </CollapsibleContent>
-        </div>
       </CollapsibleComponent>
     );
   }

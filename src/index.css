@@ -1,3 +1,5 @@
+@import url('https://snowstorm.conteir.no/styles/style.css');
+
 body {
   margin: 0;
   /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -13,6 +15,8 @@ code {
     monospace;
 }
 
+div { margin: 0 } /* ask about div-s*/
+
 /* impotr button */
 /* .button {
   background-color: rgb(16, 160, 255);
@@ -27,36 +31,56 @@ code {
   cursor: pointer;
 } */
 
-.textarea {
+/* .textarea {
   text-decoration: none;
   text-align: center;
   background-color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 8px; */
   /* width: max-content; */
-  padding: 15px 25px;
+  /* padding: 15px 25px;
   font-size: 20px;
   overflow-y: scroll;
   color: hsl(157deg 52% 30%);
   box-shadow: 0px 0px 5px 0px hsl(0deg 0% 33%);
   height: 300px;
   resize: none; /* Remove this if you want the user to resize the textarea */
-}
+/* } */ */
 
 .top-buffer { margin-top:20px; }
 
-.accordion-head {
+/* .accordion-head {
   background-color: #3EC28F !important;
   color: rgb(0, 0, 0) !important;
   padding: 5 5 5 20px !important;
   margin-top: 0px;
+} */
+
+.accordion-head {
+  background-color: #3EC28F !important;
+  /* color: rgb(0, 0, 0) !important; */
+  padding: 5 5 5 20px !important;
+  /* margin-top: 0px; */
+  transition: none !important;
+  text-align: center !important;
 }
+
+.accordion-head:hover {
+  background-color: #ccffcc !important;
+}
+
+.flex-align-center {
+  display: flex;
+  align-items: center;
+}
+
+.spinner-container {padding-left: 10px;}
 
 /* design */
 
-.button {
+/* .button { */
   /* width: 30%; */
-  text-decoration: none;
+  /* text-decoration: none;
   text-align: center;
   background-color: white;
   font-size: 20px;
@@ -66,7 +90,7 @@ code {
   padding: 15px 25px;
   color: hsl(157deg 52% 30%);
   box-shadow: 0px 0px 5px 0px hsl(0deg 0% 33%);
-}
+} */
 
 /* .button {
   display: inline-block;
@@ -79,7 +103,7 @@ code {
   border-radius: 8px;
 } */
 
-.select {
+/* .select {
     width: 100%;
     padding: 15px 25px;
     font-size: 20px;
@@ -95,7 +119,7 @@ code {
   box-shadow: 0px 0px 5px 0px hsl(0deg 0% 33%);
   border: none;
   border-radius: 8px;
-}
+} */
 
 /* .text {
   font-family: 'Montserrat-Regular', sans-serif;
@@ -104,18 +128,28 @@ code {
     font-size: 20px;
 } */
 
-.popup {
+.select {
+  word-wrap: normal;
+  padding: 8px 10px;
+  border-width: 2px;
+}
+
+.input-width {
+  width: 100%;
+}
+
+/* .popup {
   height: 400px;
   background: white;
   border: 4px solid #2F4746;
   border-radius: 8px;
-  overflow: hidden;
+  overflow: hidden; */
   /* display over all other elements, z-index defines 'layer' position */
-  margin-top: 8px;
+  /* margin-top: 8px;
   resize: vertical;
-}
+} */
 
-.popup > div.header {
+/* .popup > div.header {
   background: #2F4746;
   padding: 15px 25px;
   border-radius: 8px;
@@ -124,13 +158,13 @@ code {
   color: white;
   display: flex;
   justify-content: space-between;
-}
+} */
 
-.popup > div.header > span.popup-close {
+/* .popup > div.header > span.popup-close {
   cursor: pointer;
-}
+} */
 
-.popup > div.content {
+/* .popup > div.content {
   overflow-y: auto;
   position: relative;
   height: 90%;
@@ -142,9 +176,9 @@ code {
   align-items: center;
   padding: 5px;
   font-size: 17px;
-}
+} */
 
-.delete {
+/* .delete {
   text-decoration: none;
   text-align: center;
   background-color: white;
@@ -155,9 +189,9 @@ code {
   padding: 5px 20px;
   color: hsl(0, 45%, 42%);
   box-shadow: 0px 0px 5px 0px hsl(0deg 0% 33%);
-}
+} */
 
-.update {
+/* .update {
   text-decoration: none;
   text-align: center;
   background-color: white;
@@ -168,4 +202,4 @@ code {
   padding: 5px 20px;
   color: hsl(157deg 52% 30%);
   box-shadow: 0px 0px 5px 0px hsl(0deg 0% 33%);
-}
+} */

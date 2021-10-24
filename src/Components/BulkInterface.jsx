@@ -18,6 +18,8 @@ export const BulkInterface = class BulkInterface extends React.Component {
         // "Access-Control-Allow-Origin": "https://danger-danger.netlify.app",
         Accept: "application/json",
         "Content-Type": "application/json",
+        credentials: "include",
+        SameSite: "None"
         // Authorization: "Basic Y29udGVpcjpxN25TeHRGdA==",
       },
       showSpinner: false,
@@ -106,75 +108,57 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
   render() {
     return (
-      <>
-        <div className="row">
-          <div className="row col-md-12">
-            <div
-              style={{ backgroundColor: "#3EC28F" }}
-              className="jumbotron text-center"
-            >
-              <h1>HELSEDIREKTORATET Bulk import refsets</h1>
-              <p></p>
-            </div>
-          </div>
-        </div>
+      <div className="App">
 
-        <div className="container">
-          <div className="row">
+         <header className="jumbotron text-left" style={{ backgroundColor: "#2F4746" }}>
+          <img src="assets/logo.png" alt="logo" height="50px"></img>
+          <h1>HELSEDIREKTORATET Bulk import refsets</h1>
+          <aside className="implementationNote">
+            The header should always be used in order to establish Conteir as the
+            product owner. In some cases (as for Helsedirektoratet), we use the
+            customers logo and name.
+          </aside>
+        </header>
+
+        <article>
+          <div className="row form-group">
             
-            <div className="Input col-md-6">
+            <div className="col-md-6">
 
               <div className="row form-group">
                 <RefsetComponent
                   refsetFromChildToParent={this.callbackRefsetHandler}
                 />
               </div>
-
               <div className="row form-group">
                 {/* MAIN/SNOMEDCT-NO/HELSEDIREKTORATET */}
                   {/* MAIN/SNOMEDCT-NO/TESTBRANCH */}
               </div>
 
-              <div className="row form-group">
-                <div className="col-md-6">
-                  <textarea
-                    className="textarea"
-                    aria-label="Input"
-                    id="input_id"
-                    type="text"
-                    autoComplete="off"
-                    placeholder="SCTID;mapTarget"
-                    onChange={this.getInput}
-                  />
-                </div>
+              <div>
+                <textarea
+                  className="select"
+                  aria-label="Input"
+                  // id="input_id"
+                  type="text"
+                  autoComplete="off"
+                  placeholder="SCTID;mapTarget"
+                  onChange={this.getInput}
+                />
               </div>
 
-              <div className="row form-group">
-                <div className="col-md-6">
-                  <button
-                    className="button"
-                    onClick={this.inputHandler}
-                  >
-                    <h5>IMPORT</h5>
-                  </button>
-                </div>
+                <div>
+                  <button onClick={this.inputHandler}>IMPORT</button>
               </div>
-
-              <div className="ShowSpinner col-md-2">
-                {this.state.showSpinner ? <Spinner color="success" /> : null}
-              </div>
-
             </div>
 
-            <div className="Input col-md-6">
-              <div>
+            <div className="col-md-6">
                 <HowToComponent />
               </div>
+              {this.state.showSpinner ? <Spinner color="success" /> : null}
             </div>
-
-          </div>
-        </div>
-      </>
+        </article>
+      </div>
     );
   }
 };
