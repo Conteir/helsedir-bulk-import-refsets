@@ -138,16 +138,12 @@ div { margin: 0 } /* ask about div-s*/
   width: 100%;
 }
 
-/* .popup {
+.popup {
   height: 400px;
   background: white;
-  border: 4px solid #2F4746;
-  border-radius: 8px;
-  overflow: hidden; */
-  /* display over all other elements, z-index defines 'layer' position */
-  /* margin-top: 8px;
+  overflow: hidden;
   resize: vertical;
-} */
+}
 
 /* .popup > div.header {
   background: #2F4746;
