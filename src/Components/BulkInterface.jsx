@@ -16,7 +16,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
       requestUrl: "",
       data: {},
       dataWithMembers: {},
-      showContent: true,
+      showContent: false,
       headers: {
         // "Access-Control-Allow-Origin": "https://danger-danger.netlify.app",
         Accept: "application/json",
@@ -37,8 +37,28 @@ export const BulkInterface = class BulkInterface extends React.Component {
   //   this.setState({ branchFromTheInput: branch });
   // };
 
-  callbackRefsetHandler = (refset) => {
-    this.setState({ refset: refset });
+  callbackRefsetHandler = (refset, data) => {
+    this.setState({ refset: refset, showSpinner: true });
+
+    console.log("!!! data from inputHandler ", data);
+
+    let branch = "MAIN/SNOMEDCT-NO/TEST";
+    let getMembersRequestUrl = terminlogyServer + "/" + branch + "/members?referenceSet=" + refset;
+
+    const parameters = {
+      method: "GET",
+      credentials: "include",
+      headers: this.state.headers,
+      // body: JSON.stringify(member),
+    };
+
+    fetch(getMembersRequestUrl, parameters)
+      .then((response) => response.json())
+      .then((dataWithMembers) => {
+        console.log("dataWithMembers", dataWithMembers);
+        this.setState({ showSpinner: false, dataWithMembers: dataWithMembers, showContent: true });
+      });
+
   };
 
   // callPost = (memberForRequest, membersArray) => {
@@ -83,74 +103,27 @@ export const BulkInterface = class BulkInterface extends React.Component {
           this.setState({ showSpinner: false, data: data });
         }
 
-        this.getMembers(data);
+        // this.getMembers(data);
       });
 
-      
   };
 
-  getMembers = (data) => {
-    this.setState({ showSpinner: true });
-
-    let refsetId = data.refsetId;
-    let referencedComponentId = data.referencedComponentId;
-
-    console.log("data from inputHandler ", data);
-    console.log("refsetId from inputHandler ", refsetId);
-    console.log("referencedComponentId from inputHandler ", referencedComponentId);
-
-
-    let branch = "MAIN/SNOMEDCT-NO/TEST";
-
-    let getMembersRequestUrl = terminlogyServer + "/" + branch + "/members";
-
-    const parameters = {
-      method: "GET",
-      credentials: "include",
-      headers: this.state.headers,
-      // body: JSON.stringify(member),
-    };
-
-    fetch(getMembersRequestUrl, parameters)
-      .then((response) => response.json())
-      .then((dataWithMembers) => {
-
-        // let elem = dataWithMembers.map((item, index)=> {
-        //   return (
-        //     <div key={index}>
-        //       {console.log("refsetId here (inside bulk-import): ", item)}
-        //     </div>
-        //   );
-        // });
-
-        this.setState({ showSpinner: false, dataWithMembers: dataWithMembers, showContent: true });
-        // console.log("dataWithMembers here (inside bulk-import): ", dataWithMembers);
-        // this.showNames(dataWithMembers);
-
-      });
-
-  }
-
   showNames = () => {
-    // console.log("dataWithMembers here (inside bulk-import): ", dataWithMembers);
+
+    console.log("dataWithMembers here (inside bulk-import): ", this.state.dataWithMembers);
     // let importantData = [];
 
     if(this.state.dataWithMembers && this.state.dataWithMembers.items) {
 
       return this.state.dataWithMembers.items.map((item, index) => {
-        return (
-          <div key={index}>
-            {item.referencedComponent.term}
-            {console.log("item.referencedComponent.term: ", item.referencedComponent.term)}
-            {/* {importantData = item.referencedComponent.term} */}
-          </div>
-        );
-      });
+            return <div key={index}>{item?.referencedComponent?.fsn?.term}</div>
+      })
     }
 
   }
 
   render() {
+    // const item = this.state.dataWithMembers.item;
     return (
       <div className="App">
 
@@ -211,6 +184,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
                       <div className="content">
                         {this.showNames()}
+                        {/* {item} */}
                       </div>
                       
                     </div>
@@ -225,9 +199,6 @@ export const BulkInterface = class BulkInterface extends React.Component {
                 </div>
 
             </div>
-
-
-
 
             <div className="col-md-4">
                 <HowToComponent />
