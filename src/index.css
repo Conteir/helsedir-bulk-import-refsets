@@ -145,16 +145,17 @@ div { margin: 0 } /* ask about div-s*/
   resize: vertical;
 }
 
-/* .popup > div.header {
-  background: #2F4746;
+.frame {
+  /* background: #2F4746; */
   padding: 15px 25px;
   border-radius: 8px;
   font-size: 18px;
+  overflow-y: scroll;
   font-weight: bold;
-  color: white;
+  color: black;
   display: flex;
   justify-content: space-between;
-} */
+}
 
 /* .popup > div.header > span.popup-close {
   cursor: pointer;

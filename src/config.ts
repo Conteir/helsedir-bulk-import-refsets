@@ -8,6 +8,10 @@ export const refsets = [
   {
     title: "Fastleger (test! To delete later and uncomment the old ones!) - 123456789",
     referenceSet: 123456789,
+  },
+  {
+    title: "Just one more test refset",
+    referenceSet: 987654321,
   }
   // {
   //   id: "Legemiddel",

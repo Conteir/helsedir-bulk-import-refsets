@@ -109,14 +109,23 @@ export const BulkInterface = class BulkInterface extends React.Component {
   };
 
   showNames = () => {
-
     console.log("dataWithMembers here (inside bulk-import): ", this.state.dataWithMembers);
     // let importantData = [];
 
     if(this.state.dataWithMembers && this.state.dataWithMembers.items) {
 
       return this.state.dataWithMembers.items.map((item, index) => {
-            return <div key={index}>{item?.referencedComponent?.fsn?.term}</div>
+            return (
+              <div key={index}>
+                <div>
+                  <b>{item?.referencedComponent?.id}{" "}{item?.referencedComponent?.fsn?.term}</b>
+                </div>
+                <div>
+                  {item?.referencedComponent?.pt?.term}
+                </div>
+                
+              </div>
+            );
       })
     }
 
@@ -159,9 +168,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
                       type="text"
                       autoComplete="off"
                       placeholder="SCTID
-                        (
-                          referencedComponentId
-                          )"
+                        (f.eks 233604007)"
                       onChange={this.getInput}
                     />
                 </div>
@@ -172,14 +179,8 @@ export const BulkInterface = class BulkInterface extends React.Component {
                   {this.state.showContent ? (
                     <div className="popup">
 
-                      <div className="header">
-                        <span>Refset members' names</span>
-                        <span
-                          className="popup-close"
-                          onClick={() => this.setState({ showContent: false })}
-                        >
-                          X
-                        </span>
+                      <div className="frame">
+                        <span><h2>Refset medlemmer</h2></span>
                       </div>
 
                       <div className="content">
@@ -195,7 +196,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
               </div>
 
                 <div>
-                  <button onClick={this.inputHandler}>Add member</button>
+                  <button onClick={this.inputHandler}>Legg til medlem</button>
                 </div>
 
             </div>
