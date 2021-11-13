@@ -35,10 +35,6 @@ export const BulkInterface = class BulkInterface extends React.Component {
     console.log("inputFromTextarea", inputFromTextarea);
   };
 
-  // callbackBranchHandler = (branch) => {
-  //   this.setState({ branchFromTheInput: branch });
-  // };
-
   callbackRefsetHandler = (refset) => {
     this.setState({ refset: refset, showSpinner: true });
 
@@ -67,52 +63,72 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
   };
 
-  // callPost = (memberForRequest, membersArray) => {
   inputHandler = () => {
 
     let inputFromTextarea = this.state.inputFromTextarea;
-    console.log ("inputFromTextarea before puttind value to the concept: ", inputFromTextarea);
+    
+    let sctIds = [];
+    let membersArray = [];
+    let conceptIds = inputFromTextarea.match(/[^\n\r]+/g);
 
+    conceptIds.forEach((el) => {
+      let elArray = el.split(",");
+
+      elArray.forEach( (sctid) => {
+        let trimmedSctId = sctid.trim();
+
+        if(trimmedSctId && trimmedSctId.length > 0) {
+          sctIds.push(trimmedSctId);
+        }
+      });
+    });
+
+    sctIds.forEach( (mem) => {
       let member = {
         active: true,
-        // additionalFields: {
-        //   mapTarget: pair[1],
-        // },
         effectiveTime: new Date().toISOString().slice(0, 10).replace(/-/g, ""),
         moduleId: "715152001",
-        referencedComponentId: inputFromTextarea,
+        referencedComponentId: mem,
         refsetId: this.state.refset
       };
 
+      console.log("member:", member);
+
+      membersArray.push(member);
+    });
+
+    let memberForRequest = membersArray.shift();
+    this.callPost(memberForRequest, membersArray);
     this.setState({ showSpinner: true });
 
-    // let branch = "MAIN/SNOMEDCT-NO/TESTBRANCH";
-    let branch = "MAIN/SNOMEDCT-NO/TEST";
+  };
 
+  callPost = (memberForRequest, membersArray) => {
+    this.setState({ showSpinner: true });
+
+    // let branch = this.state.branchFromTheInput;
+    // TODO options
+    let branch = "MAIN/SNOMEDCT-NO/TEST";
     let requestUrl = terminlogyServer + "/" + branch + "/members";
 
     const parameters = {
       method: "POST",
       credentials: "include",
       headers: this.state.headers,
-      body: JSON.stringify(member),
+      body: JSON.stringify(memberForRequest),
     };
 
     fetch(requestUrl, parameters)
       .then((response) => response.json())
       .then((data) => {
-        if (member.length > 0) {
-          // let nextMember = membersArray.shift();
-          this.setState({ data: data, showSpinner: true }); // !!!!!
-          console.log("what is the data here after fetch and set? ", data);
-          this.callPost(member); // Does it need to be here?
+        if (membersArray.length > 0) {
+          this.setState({ data: data, showSpinner: true });
+          let nextMember = membersArray.shift();
+          this.callPost(nextMember, membersArray);
         } else {
-          console.log("Data here (inside bulk-import): ", data);
-          console.log("refsetId here (inside bulk-import): ", data.refsetId);
-          this.setState({ showSpinner: false, data: data });
+          this.setState({ showSpinner: false });
         }
       });
-
   };
 
   getNOdata = (dataWithMembers) => {
@@ -168,6 +184,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
       });
 
   }
+
   showNames = () => {
     if(this.state.dataWithMembers && this.state.dataWithMembers.items) {
       return this.state.dataWithMembers.items.map((item, index) => {
@@ -205,7 +222,6 @@ export const BulkInterface = class BulkInterface extends React.Component {
         </header>
 
         <article>
-
           <div className="row form-group">
             
             <div className="col-md-8">
@@ -217,7 +233,6 @@ export const BulkInterface = class BulkInterface extends React.Component {
               </div>
 
               <div className="row form-group">
-                
                 <div className="col-md-6">
                     <textarea
                       className="select"
@@ -225,15 +240,13 @@ export const BulkInterface = class BulkInterface extends React.Component {
                       // id="input_id"
                       type="text"
                       autoComplete="off"
-                      placeholder="SCTID
-                        (f.eks 233604007)"
+                      placeholder="Please, enter one or several SCTIDs
+                        (f.eks 233604007, 37271000202109)"
                       onChange={this.getInput}
                     />
                 </div>
           
-
                 <div className="col-md-6">
-
                   {this.state.showContent ? (
                     <div className="popup">
 
@@ -248,14 +261,13 @@ export const BulkInterface = class BulkInterface extends React.Component {
                       
                     </div>
                   ) : null}
-                  
                 </div>
 
               </div>
 
-                <div>
-                  <button onClick={this.inputHandler}>Legg til medlem</button>
-                </div>
+              <div>
+                <button onClick={this.inputHandler}>Legg til medlem</button>
+              </div>
 
             </div>
 
@@ -266,7 +278,6 @@ export const BulkInterface = class BulkInterface extends React.Component {
             }
 
           </div>
-
         </article>
 
       </div>
