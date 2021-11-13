@@ -2,7 +2,6 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import { Spinner } from "reactstrap";
-import HowToComponent from "./HowToComponent";
 import RefsetComponent from "./RefsetComponent";
 import { terminlogyServer } from "../config";
 
@@ -23,27 +22,33 @@ export const BulkInterface = class BulkInterface extends React.Component {
         "Content-Type": "application/json",
         // credentials: "include",
         // SameSite: "None",
-        Authorization: "Basic Y29udGVpcjpxN25TeHRGdA=="
+        Authorization: "Basic Y29udGVpcjpxN25TeHRGdA==",
+        "Accept-Language": "en-X-900000000000509007,en-X-900000000000508004,en, no"
       },
       showSpinner: false,
     };
   }
 
   getInput = (evt) => {
-    this.setState({ inputFromTextarea: evt.target.value });
+    let inputFromTextarea = evt.target.value;
+    this.setState({ inputFromTextarea: inputFromTextarea });
+    console.log("inputFromTextarea", inputFromTextarea);
   };
 
   // callbackBranchHandler = (branch) => {
   //   this.setState({ branchFromTheInput: branch });
   // };
 
-  callbackRefsetHandler = (refset, data) => {
+  callbackRefsetHandler = (refset) => {
     this.setState({ refset: refset, showSpinner: true });
 
-    console.log("!!! data from inputHandler ", data);
-
     let branch = "MAIN/SNOMEDCT-NO/TEST";
-    let getMembersRequestUrl = terminlogyServer + "/" + branch + "/members?referenceSet=" + refset;
+    
+    let getMembersRequestUrl = terminlogyServer
+        + "/" + branch
+        + "/members?referenceSet=" + refset 
+        // + "&languages=no,en"
+    ;
 
     const parameters = {
       method: "GET",
@@ -56,6 +61,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
       .then((response) => response.json())
       .then((dataWithMembers) => {
         console.log("dataWithMembers", dataWithMembers);
+        this.getNOdata(dataWithMembers);
         this.setState({ showSpinner: false, dataWithMembers: dataWithMembers, showContent: true });
       });
 
@@ -64,6 +70,9 @@ export const BulkInterface = class BulkInterface extends React.Component {
   // callPost = (memberForRequest, membersArray) => {
   inputHandler = () => {
 
+    let inputFromTextarea = this.state.inputFromTextarea;
+    console.log ("inputFromTextarea before puttind value to the concept: ", inputFromTextarea);
+
       let member = {
         active: true,
         // additionalFields: {
@@ -71,7 +80,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
         // },
         effectiveTime: new Date().toISOString().slice(0, 10).replace(/-/g, ""),
         moduleId: "715152001",
-        referencedComponentId: this.state.inputFromTextarea,
+        referencedComponentId: inputFromTextarea,
         refsetId: this.state.refset
       };
 
@@ -102,18 +111,65 @@ export const BulkInterface = class BulkInterface extends React.Component {
           console.log("refsetId here (inside bulk-import): ", data.refsetId);
           this.setState({ showSpinner: false, data: data });
         }
-
-        // this.getMembers(data);
       });
 
   };
 
+  getNOdata = (dataWithMembers) => {
+
+    let conceptIdsArray = dataWithMembers.items.map((item) => {
+      return item.referencedComponent.conceptId;
+    });
+
+    let conceptIds = conceptIdsArray.join(",");
+    console.log("Going to fetch conceptIds: ", conceptIds)
+
+    let branch = "MAIN/SNOMEDCT-NO/TEST";
+
+    let noUrl = terminlogyServer 
+        + "/browser/"
+        + branch 
+        + "/concepts?conceptIds=" + conceptIds;
+
+    const parameters = {
+      method: "GET",
+      credentials: "include",
+      headers: this.state.headers,
+    };
+
+    fetch(noUrl, parameters)
+      .then((response) => response.json())
+      .then((data) => {
+          // let nextMember = membersArray.shift();
+          let conceptNONameMap = {};
+
+          data.items.forEach((item) => {
+            if(Array.isArray(item.descriptions)) {
+              let noDesc = item.descriptions.find((desc) => {
+                return desc.term && desc.lang === "no";
+              });
+              console.log("noDesc:", noDesc);
+
+              if(noDesc) {
+                conceptNONameMap[item.conceptId] = noDesc.term;
+                console.log("conceptNONameMap: ", conceptNONameMap);
+              }
+            }
+          });
+
+          const dataWithMembers = this.state.dataWithMembers;
+          dataWithMembers.items.forEach((item) => {
+            item.$$NOTermName = conceptNONameMap[item.referencedComponent.conceptId];
+          });
+
+          this.setState({ data: data, showSpinner: true }); // !!!!!
+          console.log("data from 2nd GET", data);
+
+      });
+
+  }
   showNames = () => {
-    console.log("dataWithMembers here (inside bulk-import): ", this.state.dataWithMembers);
-    // let importantData = [];
-
     if(this.state.dataWithMembers && this.state.dataWithMembers.items) {
-
       return this.state.dataWithMembers.items.map((item, index) => {
             return (
               <div key={index}>
@@ -122,6 +178,9 @@ export const BulkInterface = class BulkInterface extends React.Component {
                 </div>
                 <div>
                   {item?.referencedComponent?.pt?.term}
+                </div>
+                <div>
+                  {item?.$$NOTermName}
                 </div>
                 
               </div>
@@ -132,7 +191,6 @@ export const BulkInterface = class BulkInterface extends React.Component {
   }
 
   render() {
-    // const item = this.state.dataWithMembers.item;
     return (
       <div className="App">
 
@@ -199,10 +257,6 @@ export const BulkInterface = class BulkInterface extends React.Component {
                   <button onClick={this.inputHandler}>Legg til medlem</button>
                 </div>
 
-            </div>
-
-            <div className="col-md-4">
-                <HowToComponent />
             </div>
 
             {
