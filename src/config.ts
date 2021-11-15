@@ -3,6 +3,17 @@
 // export const terminlogyServer = "https://snowstorm.conteir.no";
 export const terminlogyServer = "https://seabreeze.conteir.no";
 
+// KEEP ONLY ONE WAY:
+export const branches = [
+  {
+    id: "TEST",
+    title: "MAIN/SNOMEDCT-NO/TEST",
+  },
+  {
+    id: "PRODUCTION",
+    title: "MAIN/SNOMEDCT-NO/HELSEDIREKTORATET",
+  }
+];
 
 export const refsets = [
   {

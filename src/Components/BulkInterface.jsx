@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import { Spinner } from "reactstrap";
 import RefsetComponent from "./RefsetComponent";
+import BranchComponent from "./BranchComponent";
 import { terminlogyServer } from "../config";
 
 export const BulkInterface = class BulkInterface extends React.Component {
@@ -11,6 +12,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
     this.state = {
       inputFromTextarea: "",
+      branchFromTheInput: "",
       refset: "",
       requestUrl: "",
       data: {},
@@ -35,10 +37,17 @@ export const BulkInterface = class BulkInterface extends React.Component {
     console.log("inputFromTextarea", inputFromTextarea);
   };
 
+  callbackBranchHandler = (branch) => {
+    this.setState({ branchFromTheInput: branch });
+    console.log("branch: ", branch);
+  };
+
   callbackRefsetHandler = (refset) => {
     this.setState({ refset: refset, showSpinner: true });
 
     let branch = "MAIN/SNOMEDCT-NO/TEST";
+
+    // Handle here case whan branch = helsedir
     
     let getMembersRequestUrl = terminlogyServer
         + "/" + branch
@@ -230,6 +239,9 @@ export const BulkInterface = class BulkInterface extends React.Component {
                 <RefsetComponent
                   refsetFromChildToParent={this.callbackRefsetHandler}
                 />
+              </div>
+              <div className="row form-group">
+                <BranchComponent branchFromChildToParent={this.callbackBranchHandler}/>
               </div>
 
               <div className="row form-group">
