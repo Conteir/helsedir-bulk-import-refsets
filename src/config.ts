@@ -4,16 +4,16 @@
 export const terminlogyServer = "https://seabreeze.conteir.no";
 
 // KEEP ONLY ONE WAY:
-export const branches = [
-  {
-    id: "TEST",
-    title: "MAIN/SNOMEDCT-NO/TEST",
-  },
-  {
-    id: "PRODUCTION",
-    title: "MAIN/SNOMEDCT-NO/HELSEDIREKTORATET",
-  }
-];
+// export const branches = [
+//   {
+//     id: "TEST",
+//     title: "MAIN/SNOMEDCT-NO/TEST",
+//   },
+//   {
+//     id: "PRODUCTION",
+//     title: "MAIN/SNOMEDCT-NO/HELSEDIREKTORATET",
+//   }
+// ];
 
 export const refsets = [
   {
@@ -27,6 +27,10 @@ export const refsets = [
   {
     title: "Test refset",
     referenceSet: 1000000000,
+  },
+  {
+    title: "New empty refset",
+    referenceSet: 1029384756,
   }
   // {
   //   id: "Legemiddel",

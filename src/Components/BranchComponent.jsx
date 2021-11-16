@@ -1,6 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { branches } from "../config";
+// import { branches } from "../config";
 import "../index.css";
 
 
@@ -43,7 +43,7 @@ export const BranchComponent = class BranchComponent extends React.Component {
                     ref={this.input} 
                 />
 
-                <select
+                {/* <select
                     defaultValue={"DEFAULT"}
                     className="input-width select"
                     onChange={this.getBranch}
@@ -61,7 +61,7 @@ export const BranchComponent = class BranchComponent extends React.Component {
                             {branches.title}
                     </option>) 
                     }
-                </select>
+                </select> */}
 
             </div>
 
