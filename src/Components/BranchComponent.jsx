@@ -1,6 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-// import { branches } from "../config";
+import { branches } from "../config";
 import "../index.css";
 
 
@@ -31,7 +31,7 @@ export const BranchComponent = class BranchComponent extends React.Component {
   
             <div>
                 {/* KEEP ONLY ONE WAY */}
-                <input
+                {/* <input
                     id="Input"
                     className="input-width"
                     // aria-label="Branch"
@@ -41,9 +41,9 @@ export const BranchComponent = class BranchComponent extends React.Component {
                     placeholder="Branch"
                     onChange={this.getBranch}
                     ref={this.input} 
-                />
+                /> */}
 
-                {/* <select
+                <select
                     defaultValue={"DEFAULT"}
                     className="input-width select"
                     onChange={this.getBranch}
@@ -57,11 +57,11 @@ export const BranchComponent = class BranchComponent extends React.Component {
                     {branches.map((branches, key) => 
                     <option 
                         key={key} 
-                        value={branches.id}>
-                            {branches.title}
+                        value={branches.title}>
+                            {branches.id}
                     </option>) 
                     }
-                </select> */}
+                </select>
 
             </div>
 

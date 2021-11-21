@@ -1,19 +1,30 @@
 //SNOMED CT CONFIGURATIONS
 
 // export const terminlogyServer = "https://snowstorm.conteir.no";
-export const terminlogyServer = "https://seabreeze.conteir.no";
+// export const terminlogyServer = "https://seabreeze.conteir.no";
 
 // KEEP ONLY ONE WAY:
-// export const branches = [
-//   {
-//     id: "TEST",
-//     title: "MAIN/SNOMEDCT-NO/TEST",
-//   },
-//   {
-//     id: "PRODUCTION",
-//     title: "MAIN/SNOMEDCT-NO/HELSEDIREKTORATET",
-//   }
-// ];
+export const branches = [
+  {
+    id: "TEST HELSEDIREKTORATET",
+    title: "MAIN/SNOMEDCT-NO/TEST",
+  },
+  {
+    id: "!PRODUCTION HELSEDIREKTORATET",
+    title: "MAIN/SNOMEDCT-NO/HELSEDIREKTORATET",
+  }
+];
+
+export const environments = [
+  {
+    // title: "snowstorm (PRODUCTION)",
+    // urlPart: "https://snowstorm.conteir.no",
+  },{
+    title: "seabreeze (TEST)",
+    urlPart: "https://seabreeze.conteir.no",
+  }
+];
+
 
 export const refsets = [
   {
