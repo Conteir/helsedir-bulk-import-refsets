@@ -108,22 +108,23 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
     let inputFromTextarea = this.state.inputFromTextarea;
     
-    let sctIds = [];
+    // let sctIds = [];
     let membersArray = [];
-    let conceptIds = inputFromTextarea.match(/[^\n\r]+/g);
+    // let conceptIds = inputFromTextarea.match(/[^\n\r\s]+/g);
 
-    conceptIds.forEach((el) => {
-      let elArray = el.split(",");
+    // conceptIds.forEach((el) => {
+    //   let elArray = el.split(",");
 
-      elArray.forEach( (sctid) => {
-        let trimmedSctId = sctid.trim();
+    //   elArray.forEach( (sctid) => {
+    //     let trimmedSctId = sctid.trim();
 
-        if(trimmedSctId && trimmedSctId.length > 0) {
-          sctIds.push(trimmedSctId);
-        }
-      });
-    });
+    //     if(trimmedSctId && trimmedSctId.length > 0) {
+    //       sctIds.push(trimmedSctId);
+    //     }
+    //   });
+    // });
 
+    let sctIds = inputFromTextarea.split(/[\n\r\s,;]+/);
 
     let abort = false;
     sctIds.forEach((sctId) => {
@@ -154,6 +155,14 @@ export const BulkInterface = class BulkInterface extends React.Component {
       console.log("member:", member);
       membersArray.push(member);
     });
+
+    if(membersArray.length === 0) {
+      console.log("No members!");
+      return;
+    }
+
+    // console.log("executing");
+    // return;
 
     let memberForRequest = membersArray.shift();
     this.callPost(memberForRequest, membersArray);
