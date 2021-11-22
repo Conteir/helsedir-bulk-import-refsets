@@ -6,27 +6,58 @@
 // KEEP ONLY ONE WAY:
 export const branches = [
   {
-    id: "TEST HELSEDIREKTORATET",
-    title: "MAIN/SNOMEDCT-NO/TEST",
+    title: "TEST HELSEDIREKTORATET",
+    branch: "MAIN/SNOMEDCT-NO/TEST",
+    id: "TEST"
   },
   {
-    id: "!PRODUCTION HELSEDIREKTORATET",
-    title: "MAIN/SNOMEDCT-NO/HELSEDIREKTORATET",
+    title: "!PRODUCTION HELSEDIREKTORATET",
+    branch: "MAIN/SNOMEDCT-NO/HELSEDIREKTORATET",
+    id: "PROD"
   }
 ];
 
 export const environments = [
   {
-    // title: "snowstorm (PRODUCTION)",
-    // urlPart: "https://snowstorm.conteir.no",
+    title: "snowstorm (PRODUCTION)",
+    urlPart: "https://snowstorm.conteir.no",
   },{
     title: "seabreeze (TEST)",
     urlPart: "https://seabreeze.conteir.no",
   }
 ];
 
+// Production refsets
+export const refsetsProd = [
+  {
+    id: "Legemiddel",
+    title: "Legemiddel - 12881000202101",
+    referenceSet: 12881000202101,
+  },
+  {
+    id: "Administrasjonsvei",
+    title: "Administrasjonsvei - 23961000202102",
+    referenceSet: 23961000202102,
+  },
+  {
+    id: "Styrkeenhet dosering",
+    title: "Styrkeenhet dosering - 23911000202104",
+    referenceSet: 23911000202104,
+  },
+  {
+    id: "Virkestoff",
+    title: "Virkestoff - 23921000202107",
+    referenceSet: 23921000202107,
+  },
+  {
+    id: "Tilstand",
+    title: "Tilstand - 12711000202103",
+    referenceSet: 12711000202103,
+  }
+];
 
-export const refsets = [
+// refsets for testing
+export const refsetsTest = [
   {
     title: "Fastleger (test! To delete later and uncomment the old ones!) - 123456789",
     referenceSet: 123456789,
@@ -43,29 +74,4 @@ export const refsets = [
     title: "New empty refset",
     referenceSet: 1029384756,
   }
-  // {
-  //   id: "Legemiddel",
-  //   title: "Legemiddel - 12881000202101",
-  //   referenceSet: 12881000202101,
-  // },
-  // {
-  //   id: "Administrasjonsvei",
-  //   title: "Administrasjonsvei - 23961000202102",
-  //   referenceSet: 23961000202102,
-  // },
-  // {
-  //   id: "Styrkeenhet dosering",
-  //   title: "Styrkeenhet dosering - 23911000202104",
-  //   referenceSet: 23911000202104,
-  // },
-  // {
-  //   id: "Virkestoff",
-  //   title: "Virkestoff - 23921000202107",
-  //   referenceSet: 23921000202107,
-  // },
-  // {
-  //   id: "Tilstand",
-  //   title: "Tilstand - 12711000202103",
-  //   referenceSet: 12711000202103,
-  // }
 ];

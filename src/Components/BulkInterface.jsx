@@ -12,7 +12,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
     this.state = {
       inputFromTextarea: "",
-      branchFromTheInput: "",
+      branchFromTheInput: undefined,
       refset: "",
       requestUrl: "",
       data: {},
@@ -28,7 +28,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
         // credentials: "include",
         // SameSite: "None",
         Authorization: "Basic Y29udGVpcjpxN25TeHRGdA==",
-        "Accept-Language": "en-X-900000000000509007,en-X-900000000000508004,en, no"
+        // "Accept-Language": "en-X-900000000000509007,en-X-900000000000508004,en, no"
       },
       showSpinner: false,
     };
@@ -37,9 +37,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
   getInput = (evt) => {
     let inputFromTextarea = evt.target.value;
     if (inputFromTextarea && inputFromTextarea.length > 0) { 
-      this.setState({ inputFromTextarea: inputFromTextarea, showSpinner: true });
-    } else {
-      this.setState({ showSpinner: false });
+      this.setState({ inputFromTextarea: inputFromTextarea });
     }
     console.log("inputFromTextarea", inputFromTextarea);
   };
@@ -51,13 +49,18 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
   getTerminologyEnvironment = (evt) => {
     let terminologyEnvironment = evt.target.value;
-    this.setState({ terminologyEnvironment: terminologyEnvironment, showSpinner: true });
+    this.setState({ terminologyEnvironment: terminologyEnvironment });
     console.log("Chosen terminology server: ", terminologyEnvironment);
   }
 
   callbackRefsetHandler = (refset) => {
-    let branch = this.state.branchFromTheInput;
-    this.setState({ refset: refset, showSpinner: true });
+    this.getRefsetData(refset);
+    this.setState({ refset: refset });
+  }
+
+  getRefsetData = (refset) => {
+    let branch = encodeURIComponent(this.state.branchFromTheInput.branch);
+    
     // let terminologyEnvironment = this.state.terminologyEnvironment;
 
     let terminologyEnvironment = this.state.terminologyEnvironment;
@@ -87,6 +90,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
     console.log("terminologyEnvironment before fetch", this.state.terminologyEnvironment);
 
     if (refset && branch && terminologyEnvironment) {
+      this.setState({showSpinner: true});
       fetch(getMembersRequestUrl, parameters)
         .then((response) => response.json())
         .then((dataWithMembers) => {
@@ -126,12 +130,14 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
     let sctIds = inputFromTextarea.split(/[\n\r\s,;]+/);
 
+    console.log("sctIds from the input 129 line:", sctIds);
+
     let abort = false;
     sctIds.forEach((sctId) => {
       if(
           Array.isArray(this.state.dataWithMembers.items)
           &&
-          this.state.dataWithMembers.items.some((mem) => mem.referencedComponent.conceptId === sctId)
+          this.state.dataWithMembers.items.some((mem) => mem?.referencedComponent?.conceptId === sctId)
         )
       {
         alert("Failed to add members: SCTID " + sctId + " already exists");
@@ -148,7 +154,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
         active: true,
         effectiveTime: new Date().toISOString().slice(0, 10).replace(/-/g, ""),
         moduleId: "715152001",
-        referencedComponentId: mem,
+        referencedComponentId: mem || "",
         refsetId: this.state.refset
       };
 
@@ -172,10 +178,9 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
   callPost = (memberForRequest, membersArray) => {
     let terminologyEnvironment = this.state.terminologyEnvironment;
-    let branch = this.state.branchFromTheInput;
+    let branch = encodeURIComponent(this.state.branchFromTheInput.branch);
     this.setState({ showSpinner: true });
 
-    // let branch = this.state.branchFromTheInput;
     // TODO options
     // let branch = "MAIN/SNOMEDCT-NO/TEST";
     let requestUrl = terminologyEnvironment + "/" + branch + "/members";
@@ -197,11 +202,14 @@ export const BulkInterface = class BulkInterface extends React.Component {
           this.setState({ data: data, showSpinner: true });
 
           let nextMember = membersArray.shift();
-          console.log("nextMember.referencedComponentId POST", nextMember.referencedComponentId);
+          console.log("nextMember.referencedComponentId POST", nextMember?.referencedComponentId);
 
           this.callPost(nextMember, membersArray);
+          alert("Added!");
+
         } else {
           this.setState({ showSpinner: false });
+          this.getRefsetData(this.state.refset);
         }
       });
   };
@@ -224,7 +232,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
     let conceptIds = conceptIdsArray.join(",");
     console.log("Going to fetch conceptIds: ", conceptIds)
 
-    let branch = this.state.branchFromTheInput;
+    let branch = encodeURIComponent(this.state.branchFromTheInput.branch);
 
     let noUrl = terminlogyServer 
         + "/browser/"
@@ -249,7 +257,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
             // no need to check item.referencedComponent:
             if(Array.isArray(item.descriptions)) {
               let noDesc = item.descriptions.find((desc) => {
-                return desc.term && desc.lang === "no";
+                return desc.term && ( desc.lang === "no" || desc.lang === "nb");
               });
               console.log("noDesc:", noDesc);
 
@@ -284,7 +292,8 @@ export const BulkInterface = class BulkInterface extends React.Component {
               console.log("inputFromTextarea", this.state.inputFromTextarea);
   
               if (inputFromTextarea === item.conceptId) {
-                alert("иди нахуй!");
+                // alert("Norwegian terms were added as well!");
+                console.log("Norwegian terms were added as well!");
               };
 
             } else {
@@ -307,7 +316,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
             return (
               <div key={index}>
 
-                <div className="row">
+                <div className="form-group row">
                 
                     <div className="col-md-10">
                       
@@ -336,16 +345,16 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
                     <div className="col-md-2">
 
-                    <div>
-                      <button 
-                        onClick={() => this.deleteMember(item)} 
-                        className={'secondary'}
-                        >
-                            <b>Fjern</b>
-                      </button>
-                    </div>
+                      <div>
+                        <button 
+                          onClick={() => this.deleteMember(item)} 
+                          className={'secondary'}
+                          >
+                              <b>Fjern</b>
+                        </button>
+                      </div>
 
-                  </div>
+                    </div>
 
                 </div>
 
@@ -385,6 +394,11 @@ export const BulkInterface = class BulkInterface extends React.Component {
       dataWithMembers.items.forEach((item) => {
         if (item?.referencedComponent?.conceptId && (item?.referencedComponent?.conceptId === memberToDelete)) {
           item.active = false;
+          // to make this condition better
+          if (!item?.referencedComponent) {
+            item.referencedComponent = item.referencedComponentId;
+            console.log("not safe");
+          }
           return;
         } else {
           showError = true;
@@ -393,14 +407,12 @@ export const BulkInterface = class BulkInterface extends React.Component {
       });
 
       if(showError) {
-        alert("This refset contains at least one wrong member without referencedComponent!");
-        return;
+        alert("If you see this alert, that means that this refset contains at least one wrong member without referencedComponent, so referencedComponent was equated to referencedComponentId !");
+        // return;
       }
 
       console.log("memberToDelete before hanges:", memberToDelete);
       
-      this.setState=({ memberToDelete: memberToDelete});
-
       console.log("refset is ready for changes!");
       this.callDelete(dataWithMembers, memberIdToDelete);
     } else {
@@ -417,14 +429,13 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
     console.log("dataWithMembers when callPut is called: ", dataWithMembers);
 
-    let branch = this.state.branchFromTheInput
+    let branch = encodeURIComponent(this.state.branchFromTheInput.branch);
       // "/MAIN/SNOMEDCT-NO/TEST"
-      ;
 
     let terminlogyServer = this.state.terminologyEnvironment;
 
     let requestUrl =
-      terminlogyServer + branch + "/members/" + memberIdToDelete + "?force=false";
+      terminlogyServer + "/" + branch + "/members/" + memberIdToDelete + "?force=false";
 
     if (memberIdToDelete) {
       fetch(requestUrl, {
@@ -435,6 +446,10 @@ export const BulkInterface = class BulkInterface extends React.Component {
           Accept: "application/json"
           // "Content-Type": "application/json",
         },
+      })
+      .then(() => {
+        alert("Deleted");
+        this.getRefsetData(this.state.refset);
       });
       // this.setState({ showSpinner: false });
       console.log("dataWithMembers after delete", dataWithMembers);
@@ -442,7 +457,6 @@ export const BulkInterface = class BulkInterface extends React.Component {
       // console.log("You have to add branch!");
       this.setState({ showSpinner: false });
     }
-    alert("You have deleted a member!");
   };
 
 
@@ -461,12 +475,12 @@ export const BulkInterface = class BulkInterface extends React.Component {
         </header>
 
         <article>
-          <div className="row form-group">
+          <div className="form-group">
             
             <div className="col-md-8">
 
               <div className="row form-group">
-                <div>
+                <div style={{}}>
                   <select
                     defaultValue={"DEFAULT"}
                     className="input-width select"
@@ -475,7 +489,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
                     <option 
                         value="DEFAULT" disabled
                         select="default">
-                            Please, select a terminology server (choose wisely):
+                            Velg server:
                     </option>
                     
                     {
@@ -496,8 +510,8 @@ export const BulkInterface = class BulkInterface extends React.Component {
               </div>
 
               <div className="row form-group">
-                <RefsetComponent disabled={!this.state.branchFromTheInput || this.state.branchFromTheInput.length === 0}
-                  refsetFromChildToParent={this.callbackRefsetHandler}
+                <RefsetComponent disabled={!this.state.branchFromTheInput}
+                  refsetFromChildToParent={this.callbackRefsetHandler} branch={this.state.branchFromTheInput}
                 />
               </div>
               
@@ -510,8 +524,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
                       // id="input_id"
                       type="text"
                       autoComplete="off"
-                      placeholder="Please, enter one or several SCTIDs
-                        (f.eks 233604007, 37271000202109)"
+                      placeholder="Legg til ett eller flere medlemmer. Legg til SCTID separert med komma, mellomrom eller linjeskift."
                       onChange={this.getInput}
                     />
                 </div>
@@ -540,15 +553,14 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
             </div>
 
-            {
-              this.state.showSpinner ? 
-                <Spinner color="success" /> 
-              : null
-            }
-
           </div>
         </article>
-
+        {this.state.showSpinner && 
+          <div>
+            <div className="backdrop"></div>
+            <div className="spinner-container"><Spinner color="success" /></div>
+          </div>
+        }
       </div>
     );
   }

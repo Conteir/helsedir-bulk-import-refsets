@@ -1,7 +1,7 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
-import { refsets } from "../config";
+import { refsetsProd, refsetsTest } from "../config";
 
 export const RefsetComponent = class RefsetComponent extends React.Component {
    
@@ -17,6 +17,13 @@ export const RefsetComponent = class RefsetComponent extends React.Component {
     }
 
     render() {
+        let ref = null;
+        
+        if(this.props.branch) {
+            if(this.props.branch.id === "TEST") ref = refsetsTest;
+            else if (this.props.branch.id === "PROD") ref = refsetsProd;
+        }
+
         return (
             <div>
                 <div className="form-group">
@@ -49,15 +56,17 @@ export const RefsetComponent = class RefsetComponent extends React.Component {
 
                         <option value="DEFAULT" 
                             select="default" disabled>
-                            Please, select a refset:
+                            Velg refset:
                         </option>
 
-                        {refsets.map((refsets, key) => 
-                            <option key={key} 
-                                    value={refsets.referenceSet}
+
+                        {ref &&
+                        ref.map((r, index) => 
+                            <option key={index} 
+                                    value={r.referenceSet}
                             >
-                                {refsets.title}
-                            </option>)
+                                {r.title}
+                            </option>) 
                         }
                     </select>
                 </div>

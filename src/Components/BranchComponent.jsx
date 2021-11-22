@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { branches } from "../config";
 import "../index.css";
 
-
 export const BranchComponent = class BranchComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -14,35 +13,21 @@ export const BranchComponent = class BranchComponent extends React.Component {
     }
    
     getBranch = (evt) => {
-        let branch = evt.target.value;
+        let id = evt.target.value;
 
-        let encodedBranch = encodeURIComponent(branch);
-        branch = encodedBranch;
+        let selected = branches.find(b => b.id === id);
 
-        if (branch.length===0 || branch===undefined) {
+        if (!selected) {
             console.log("Please, provide with a branch");
         }
 
-        this.props.branchFromChildToParent(branch);
+        this.props.branchFromChildToParent(selected);
     }
 
     render() {
         return (
   
             <div>
-                {/* KEEP ONLY ONE WAY */}
-                {/* <input
-                    id="Input"
-                    className="input-width"
-                    // aria-label="Branch"
-                    // id="branch_id"
-                    type="text"
-                    autoComplete="off"
-                    placeholder="Branch"
-                    onChange={this.getBranch}
-                    ref={this.input} 
-                /> */}
-
                 <select
                     defaultValue={"DEFAULT"}
                     className="input-width select"
@@ -51,15 +36,15 @@ export const BranchComponent = class BranchComponent extends React.Component {
                     <option 
                         value="DEFAULT" disabled
                         select="default">
-                            Please, select a BRANCH:
+                            Velg BRANCH:
                     </option>
                     
-                    {branches.map((branches, key) => 
-                    <option 
-                        key={key} 
-                        value={branches.title}>
-                            {branches.id}
-                    </option>) 
+                    {branches.map((branch, key) => 
+                        <option 
+                            key={key} 
+                            value={branch.id}>
+                                {branch.title}
+                        </option>) 
                     }
                 </select>
 
