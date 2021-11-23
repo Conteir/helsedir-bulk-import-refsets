@@ -62,7 +62,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
   getRefsetData = (refset) => {
     let branch = encodeURIComponent(this.state.branchFromTheInput.branch);
     let terminologyEnvironment = this.state.terminologyEnvironment;
-    let getMembersRequestUrl = terminologyEnvironment + "/" + branch + "/members?referenceSet=" + refset;
+    let getMembersRequestUrl = terminologyEnvironment + "/" + branch + "/members?limit=200&referenceSet=" + refset;
 
     const parameters = {
       method: "GET",
@@ -303,6 +303,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
   }
 
   showNames = () => {
+    let counter = 1;
     if(this.state.dataWithMembers && this.state.dataWithMembers.items) {
       return this.state.dataWithMembers.items.map((item, index) => {
             return (
@@ -311,6 +312,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
                 <div className="form-group row">
                 
                     <div className="col-md-10">
+                      {counter++}
                       
                       <div className="row">
                         <b>
