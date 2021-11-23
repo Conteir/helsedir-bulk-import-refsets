@@ -58,25 +58,11 @@ export const BulkInterface = class BulkInterface extends React.Component {
     this.setState({ refset: refset });
   }
 
+  // First GET. Getting all members from the certain refset:
   getRefsetData = (refset) => {
     let branch = encodeURIComponent(this.state.branchFromTheInput.branch);
-    
-    // let terminologyEnvironment = this.state.terminologyEnvironment;
-
     let terminologyEnvironment = this.state.terminologyEnvironment;
-
-    console.log("What the hell is here?!", terminologyEnvironment);
-
-    // let terminologyEnvironment = terminologyEnvironment;
-
-    console.log("What the refset is here?!", refset);
-
-    // Handle here the case whan branch = helsedir
-    
     let getMembersRequestUrl = terminologyEnvironment + "/" + branch + "/members?referenceSet=" + refset;
-
-    console.log("getMembersRequestUrl", getMembersRequestUrl);
-
 
     const parameters = {
       method: "GET",
@@ -95,10 +81,14 @@ export const BulkInterface = class BulkInterface extends React.Component {
         .then((response) => response.json())
         .then((dataWithMembers) => {
           console.log("dataWithMembers", dataWithMembers);
+          // Getting only correct members from the serverx:
+          dataWithMembers.items = dataWithMembers.items.filter(item => item.referencedComponent !== undefined);
           this.getNOdata(dataWithMembers);
           this.setState({ showSpinner: false, dataWithMembers: dataWithMembers, showContent: true });
         });
-      }
+    } else {
+      alert("Du må velg server!");
+    }
 
   };
 
@@ -106,6 +96,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
     if (this.state.refset===undefined || !this.state.inputFromTextarea) {
       alert("You should put data to the text area and chose a refset!");
+      this.setState( {showSpinner: false} );
     }
 
     this.setState({ showSpinner: true });
@@ -134,12 +125,14 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
     let abort = false;
     sctIds.forEach((sctId) => {
+      console.log("this.state.dataWithMembers.items", this.state.dataWithMembers.items);
       if(
           Array.isArray(this.state.dataWithMembers.items)
           &&
           this.state.dataWithMembers.items.some((mem) => mem?.referencedComponent?.conceptId === sctId)
         )
       {
+        console.log(this.state.dataWithMembers.items.mem?.referencedComponent?.conceptId);
         alert("Failed to add members: SCTID " + sctId + " already exists");
         abort = true;
       }
@@ -205,9 +198,9 @@ export const BulkInterface = class BulkInterface extends React.Component {
           console.log("nextMember.referencedComponentId POST", nextMember?.referencedComponentId);
 
           this.callPost(nextMember, membersArray);
-          alert("Added!");
 
         } else {
+          alert("Added!");
           this.setState({ showSpinner: false });
           this.getRefsetData(this.state.refset);
         }
@@ -252,6 +245,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
           let conceptNONameMap = {};
 
           console.log("data before 202 str: ", data);
+          console.log("fetched NO terms size: ", data?.items?.length);
 
           data?.items?.forEach((item) => {
             // no need to check item.referencedComponent:
@@ -259,12 +253,13 @@ export const BulkInterface = class BulkInterface extends React.Component {
               let noDesc = item.descriptions.find((desc) => {
                 return desc.term && ( desc.lang === "no" || desc.lang === "nb");
               });
-              console.log("noDesc:", noDesc);
+              // console.log("noDesc:", noDesc);
 
               if(noDesc) {
                 conceptNONameMap[item.conceptId] = noDesc.term;
-                console.log("conceptNONameMap: ", conceptNONameMap);
+                // console.log("conceptNONameMap: ", conceptNONameMap);
               }
+              console.log("item.descriptions", item.descriptions);
             } 
           });
         
@@ -272,6 +267,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
           const dataWithMembers = this.state.dataWithMembers;
           dataWithMembers.items.forEach((item) => {
             if(item.referencedComponent) {
+              // Create new field for norsk
               item.$$NOTermName = conceptNONameMap[item.referencedComponent.conceptId];
             } 
             // else {
@@ -288,8 +284,8 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
           dataBeforePost?.items?.forEach((item) => {
             if (data && item.conceptId && dataBeforePost) {
-              console.log("item.conceptId", item.conceptId);
-              console.log("inputFromTextarea", this.state.inputFromTextarea);
+              // console.log("item.conceptId", item.conceptId);
+              // console.log("inputFromTextarea", this.state.inputFromTextarea);
   
               if (inputFromTextarea === item.conceptId) {
                 // alert("Norwegian terms were added as well!");
@@ -302,10 +298,6 @@ export const BulkInterface = class BulkInterface extends React.Component {
             };
 
           });
-          // let conceptToCheck = dataBeforePost.map((item) => {
-          //   return item.conceptId;
-          // });
-
       });
 
   }
@@ -375,12 +367,9 @@ export const BulkInterface = class BulkInterface extends React.Component {
   //  console.log("item.conceptId", item.conceptId);
    console.log("dataWithMembers: ", dataWithMembers);
 
-
-   // to define!!
-   let memberToDelete = item?.referencedComponent?.conceptId;
-
-   let memberIdToDelete = item?.memberId;
-
+    let memberToDelete = item?.referencedComponent?.conceptId;
+    // Getting member uuid:
+    let memberIdToDelete = item?.memberId;
 
     let answerYes = window.confirm(
       "Are you sure you want to delete this member? This action can't be undone."
@@ -411,7 +400,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
         // return;
       }
 
-      console.log("memberToDelete before hanges:", memberToDelete);
+      console.log("memberToDelete before changed conceptId/referencedComponentId:", memberToDelete);
       
       console.log("refset is ready for changes!");
       this.callDelete(dataWithMembers, memberIdToDelete);
@@ -425,7 +414,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
     // this.setState({ showSpinner: true });
 
-    console.log("member to delete in request URL:", memberIdToDelete);
+    console.log("uuid of member to delete in request URL:", memberIdToDelete);
 
     console.log("dataWithMembers when callPut is called: ", dataWithMembers);
 
@@ -514,7 +503,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
                   refsetFromChildToParent={this.callbackRefsetHandler} branch={this.state.branchFromTheInput}
                 />
               </div>
-              
+
 
               <div className="row form-group">
                 <div className="col-md-5">
