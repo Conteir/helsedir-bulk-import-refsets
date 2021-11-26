@@ -75,3 +75,28 @@ export const refsetsTest = [
     referenceSet: 1029384756,
   }
 ];
+
+// refactored!
+export const acceptabilityStatus = [
+  {
+    id: "ACCEPTABLE",
+    title: "ACCEPTABLE",
+    refset: 900000000000549004
+  },
+  {
+    id: "PREFERRED",
+    title: "PREFERRED",
+    refset: 900000000000548007
+  },
+];
+
+export const typeSynonimRefsets = [
+  {
+    title: "Norwegian bokmål - 61000202103",
+    referenceSet: 61000202103,
+  },
+  {
+    title: "Fastleger - 123456789",
+    referenceSet: 123456789,
+  }
+]

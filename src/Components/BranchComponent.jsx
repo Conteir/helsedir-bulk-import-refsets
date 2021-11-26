@@ -14,7 +14,6 @@ export const BranchComponent = class BranchComponent extends React.Component {
    
     getBranch = (evt) => {
         let id = evt.target.value;
-
         let selected = branches.find(b => b.id === id);
 
         if (!selected) {
@@ -26,7 +25,6 @@ export const BranchComponent = class BranchComponent extends React.Component {
 
     render() {
         return (
-  
             <div>
                 <select
                     defaultValue={"DEFAULT"}
@@ -47,9 +45,7 @@ export const BranchComponent = class BranchComponent extends React.Component {
                         </option>) 
                     }
                 </select>
-
             </div>
-
         );
     }
 };

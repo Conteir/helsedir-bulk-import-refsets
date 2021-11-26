@@ -62,7 +62,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
   getRefsetData = (refset) => {
     let branch = encodeURIComponent(this.state.branchFromTheInput.branch);
     let terminologyEnvironment = this.state.terminologyEnvironment;
-    let getMembersRequestUrl = terminologyEnvironment + "/" + branch + "/members?limit=200&referenceSet=" + refset;
+    let getMembersRequestUrl = terminologyEnvironment + "/" + branch + "/members?limit=300&referenceSet=" + refset;
 
     const parameters = {
       method: "GET",
@@ -364,7 +364,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
                       <div className="row">
                         <div>
-                            {item?.$$NOTermName}
+                            {"NO: " + item?.$$NOTermName}
                         </div>
                       </div>
 
