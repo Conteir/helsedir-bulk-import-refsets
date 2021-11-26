@@ -82,9 +82,10 @@ export const BulkInterface = class BulkInterface extends React.Component {
         .then((dataWithMembers) => {
           console.log("dataWithMembers", dataWithMembers);
           // Getting only correct members from the serverx:
-          dataWithMembers.items = dataWithMembers.items.filter(item => item.referencedComponent !== undefined);
+          // Filter out without referencedComponent OR fsn
+          dataWithMembers.items = dataWithMembers.items.filter(item => item?.referencedComponent?.fsn !== undefined);
           this.getNOdata(dataWithMembers);
-          this.setState({ showSpinner: false, dataWithMembers: dataWithMembers, showContent: true });
+          // this.setState({ showSpinner: false, dataWithMembers: dataWithMembers, showContent: true });
         });
     } else {
       alert("Du må velg server!");
@@ -252,27 +253,27 @@ export const BulkInterface = class BulkInterface extends React.Component {
       });
   };
 
-  getOneConcept = (conceptId) => {
-
-  }
-
   getNOdata = (dataWithMembers) => {
 
-    let conceptIdsArray = [];
+    let conceptIdsMap = {};
+
+    console.log("Valid items: " + dataWithMembers.items.length);
 
     dataWithMembers.items.forEach((item) => {
       // check if "referencedComponent" exist!
       if (item.referencedComponent) {
-        conceptIdsArray.push(item.referencedComponent.conceptId);
-      } 
+        conceptIdsMap[item.referencedComponent.conceptId] = true; // restrics duplicated ids
+      } else conceptIdsMap[item.referencedComponentId] = true;
     });
 
-    let inputFromTextarea = this.state.inputFromTextarea;
-    
-    inputFromTextarea = inputFromTextarea.replace(/[ \t\r\n\f]/g, ",");
+    let conceptIdsArray = [];
+    for(let conceptId in conceptIdsMap) {
+      conceptIdsArray.push(conceptId);
+    }
+
     let terminlogyServer = this.state.terminologyEnvironment;
     let conceptIds = conceptIdsArray.join(",");
-    console.log("Going to fetch conceptIds: ", conceptIds)
+    console.log("Going to fetch conceptIds: ", conceptIdsArray.length);
 
     let branch = encodeURIComponent(this.state.branchFromTheInput.branch);
 
@@ -293,8 +294,8 @@ export const BulkInterface = class BulkInterface extends React.Component {
           // let nextMember = membersArray.shift();
           let conceptNONameMap = {};
 
-          console.log("Only valid data: ", data);
-          console.log("fetched NO terms size: ", data?.items?.length);
+          console.log("Fetched concepts: ", data);
+          console.log("Fetched NO terms size: ", data?.items?.length);
 
           data?.items?.forEach((item) => {
             // no need to check item.referencedComponent:
@@ -302,51 +303,33 @@ export const BulkInterface = class BulkInterface extends React.Component {
               let noDesc = item.descriptions.find((desc) => {
                 return desc.term && ( desc.lang === "no" || desc.lang === "nb");
               });
+              // fallback
+              if(!noDesc) {
+                noDesc = item.descriptions.find((desc) => {
+                  return desc.term && desc.lang === "en";
+                });
+              }
+
               // console.log("noDesc:", noDesc);
 
               if(noDesc) {
                 conceptNONameMap[item.conceptId] = noDesc.term;
                 // console.log("conceptNONameMap: ", conceptNONameMap);
               }
-              console.log("item.descriptions", item.descriptions);
             } 
           });
         
-
-          const dataWithMembers = this.state.dataWithMembers;
           dataWithMembers.items.forEach((item) => {
             if(item.referencedComponent) {
               // Create new field for norsk
               item.$$NOTermName = conceptNONameMap[item.referencedComponent.conceptId];
-            } 
+            } else item.$$NOTermName = conceptNONameMap[item.referencedComponentId];
             // else {
             //   return alert("Error: this member does not contain item.referencedComponent!");
             // }
           });
 
-          this.setState({ data: data }); // !!!!!
-
-          let dataBeforePost = data;
-          console.log("data from 2nd GET", data);
-          console.log("dataBeforePost", dataBeforePost);
-
-
-          dataBeforePost?.items?.forEach((item) => {
-            if (data && item.conceptId && dataBeforePost) {
-              // console.log("item.conceptId", item.conceptId);
-              // console.log("inputFromTextarea", this.state.inputFromTextarea);
-  
-              if (inputFromTextarea === item.conceptId) {
-                // alert("Norwegian terms were added as well!");
-                console.log("Norwegian terms were added as well!");
-              };
-
-            } else {
-              alert("There is no data or no referencedComponent || conceptId");
-              return;
-            };
-
-          });
+          this.setState({ showSpinner: false, dataWithMembers: dataWithMembers, showContent: true });
       });
 
   }
@@ -507,12 +490,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
 
          <header className="jumbotron text-left" style={{ backgroundColor: "#2F4746" }}>
           <img src="assets/logo.png" alt="logo" height="50px"></img>
-          <h1>HELSEDIREKTORATET Bulk import refsets</h1>
-          <aside className="implementationNote">
-            The header should always be used in order to establish Conteir as the
-            product owner. In some cases (as for Helsedirektoratet), we use the
-            customers logo and name.
-          </aside>
+          <h1>SNOMED CT - OPPDATERING AV REFSET</h1>
         </header>
 
         <article>
