@@ -101,7 +101,7 @@ export const TranslationInterface = class TranslationInterface extends React.Com
     if (branch && sctid) {
       console.log("sctid at the beginning: " + sctid);
 
-      fetch(requestUrl, proxy, {
+      fetch(requestUrl, {
         method: "GET",
         credentials: "include",
         headers: {
