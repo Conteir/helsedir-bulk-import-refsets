@@ -8,24 +8,27 @@ export const branches = [
   {
     title: "TEST HELSEDIREKTORATET",
     branch: "MAIN/SNOMEDCT-NO/TEST",
-    id: "TEST"
+    id: "TEST",
   },
   {
     title: "!PRODUCTION HELSEDIREKTORATET",
     branch: "MAIN/SNOMEDCT-NO/HELSEDIREKTORATET",
-    id: "PROD"
-  }
+    id: "PROD",
+  },
 ];
 
 export const environments = [
   {
     title: "snowstorm (PRODUCTION)",
     urlPart: "https://snowstorm.conteir.no",
-  },{
+  },
+  {
     title: "seabreeze (TEST)",
     urlPart: "https://seabreeze.conteir.no",
-  }
+  },
 ];
+export const proxy =
+  "https://belarussian.netlify.app/.netlify/functions/proxy/";
 
 // Production refsets
 export const refsetsProd = [
@@ -53,13 +56,14 @@ export const refsetsProd = [
     id: "Tilstand",
     title: "Tilstand - 12711000202103",
     referenceSet: 12711000202103,
-  }
+  },
 ];
 
 // refsets for testing
 export const refsetsTest = [
   {
-    title: "Fastleger (test! To delete later and uncomment the old ones!) - 123456789",
+    title:
+      "Fastleger (test! To delete later and uncomment the old ones!) - 123456789",
     referenceSet: 123456789,
   },
   {
@@ -73,7 +77,7 @@ export const refsetsTest = [
   {
     title: "New empty refset",
     referenceSet: 1029384756,
-  }
+  },
 ];
 
 // refactored!
@@ -81,12 +85,12 @@ export const acceptabilityStatus = [
   {
     id: "ACCEPTABLE",
     title: "ACCEPTABLE",
-    refset: 900000000000549004
+    refset: 900000000000549004,
   },
   {
     id: "PREFERRED",
     title: "PREFERRED",
-    refset: 900000000000548007
+    refset: 900000000000548007,
   },
 ];
 
@@ -98,5 +102,5 @@ export const typeSynonimRefsets = [
   {
     title: "Fastleger - 123456789",
     referenceSet: 123456789,
-  }
-]
+  },
+];

@@ -8,8 +8,7 @@ import AcceptabilityStatusComponent from "./AcceptabilityStatusComponent";
 import RefsetIDComponent from "./RefsetIDComponent";
 import DescriptionRenderComponent from "./DescriptionRenderComponent";
 import EnvironmentComponent from "./EnvironmentComponent";
-
-// import { terminlogyServer } from "../config";
+import { proxy } from "../config";
 
 export const TranslationInterface = class TranslationInterface extends React.Component {
   constructor(props) {
@@ -26,18 +25,22 @@ export const TranslationInterface = class TranslationInterface extends React.Com
       showSpinner: false,
       data: {},
       showContent: false,
-      acceptabilityPairs : [],
-      preferredRefsets: {}
+      acceptabilityPairs: [],
+      preferredRefsets: {},
     };
   }
 
   checkPreffered = (refsetID, typeSynonim) => {
-    if(typeSynonim === "PREFERRED" && this.state?.preferredRefsets[refsetID]) {
-        console.log("PREFERRED term for this REFSET already exists in description: " 
-                    + this.state.preferredRefsets[refsetID] 
-                    + "!");
-        alert("PREFERRED term for this REFSET in this description already exists!");
-        return;
+    if (typeSynonim === "PREFERRED" && this.state?.preferredRefsets[refsetID]) {
+      console.log(
+        "PREFERRED term for this REFSET already exists in description: " +
+          this.state.preferredRefsets[refsetID] +
+          "!"
+      );
+      alert(
+        "PREFERRED term for this REFSET in this description already exists!"
+      );
+      return;
     }
   };
 
@@ -65,8 +68,6 @@ export const TranslationInterface = class TranslationInterface extends React.Com
     this.searchSCTID(this.state.sctid, branch);
   };
 
-  
-
   callbackEnvironmentHandler = (environment) => {
     this.setState({ environment: environment });
     console.log("this is the environment!", environment);
@@ -92,50 +93,51 @@ export const TranslationInterface = class TranslationInterface extends React.Com
         "Please, put the values! (sctid && newTerm && synonim type && refsetID"
       );
     }
-    
-    let requestUrl =
-      environment + "/browser/" + branch + "/concepts/" + sctid;
+
+    let requestUrl = environment + "/browser/" + branch + "/concepts/" + sctid;
     console.log("branch", branch);
     console.log("requestUrl", requestUrl);
 
     if (branch && sctid) {
       console.log("sctid at the beginning: " + sctid);
 
-      fetch(requestUrl, {
+      fetch(requestUrl, proxy, {
         method: "GET",
         credentials: "include",
         headers: {
           Authorization: "Basic Y29udGVpcjpxN25TeHRGdA==",
           Accept: "application/json",
           "Content-Type": "application/json",
-        }
+        },
       })
         .then((response) => response.json())
         .then((data) => {
-            console.log("data from the response: ", data);
-            this.setState({ data: data, showSpinner: false }); // !!!!!
+          console.log("data from the response: ", data);
+          this.setState({ data: data, showSpinner: false }); // !!!!!
 
-            if(data) {
-                let preferredRefsets = {};
-                data.descriptions.forEach( (desc) => {
-                    if(desc.type === "SYNONYM") {
-                        for(let refsetID in desc.acceptabilityMap) {
-                            if(desc.acceptabilityMap[refsetID] === "PREFERRED" && !preferredRefsets[refsetID]) {
-                                preferredRefsets[refsetID] = desc.term; // optional, to use a value later
-                            }
-                        }
-                    }
-                });
-                this.setState({preferredRefsets: preferredRefsets});
-            }
+          if (data) {
+            let preferredRefsets = {};
+            data.descriptions.forEach((desc) => {
+              if (desc.type === "SYNONYM") {
+                for (let refsetID in desc.acceptabilityMap) {
+                  if (
+                    desc.acceptabilityMap[refsetID] === "PREFERRED" &&
+                    !preferredRefsets[refsetID]
+                  ) {
+                    preferredRefsets[refsetID] = desc.term; // optional, to use a value later
+                  }
+                }
+              }
+            });
+            this.setState({ preferredRefsets: preferredRefsets });
+          }
 
-            arrayWithConceptDescriptions.push(data.descriptions);
-            console.log(
-                "arrayWithConceptDescriptions: ",
-                arrayWithConceptDescriptions
-            );
+          arrayWithConceptDescriptions.push(data.descriptions);
+          console.log(
+            "arrayWithConceptDescriptions: ",
+            arrayWithConceptDescriptions
+          );
         });
-
     } else {
       console.log("You have to add branch!");
     }
@@ -161,7 +163,8 @@ export const TranslationInterface = class TranslationInterface extends React.Com
       effectiveTime: new Date().toISOString().slice(0, 10).replace(/-/g, ""),
     };
 
-    member.acceptabilityMap[this.state.refsetID] = this.state.acceptabilityStatusFromTheInput;
+    member.acceptabilityMap[this.state.refsetID] =
+      this.state.acceptabilityStatusFromTheInput;
 
     let data = this.state.data;
 
@@ -171,7 +174,7 @@ export const TranslationInterface = class TranslationInterface extends React.Com
     );
 
     data.descriptions.push(member);
-      this.callPut(data);
+    this.callPut(data);
 
     console.log(member);
   };
@@ -249,32 +252,30 @@ export const TranslationInterface = class TranslationInterface extends React.Com
   render() {
     return (
       <div className="App">
-        <header className="jumbotron text-left" style={{ backgroundColor: "#2F4746" }}>
+        <header
+          className="jumbotron text-left"
+          style={{ backgroundColor: "#2F4746" }}
+        >
           <img src="assets/logo.png" alt="logo" height="50px"></img>
           <h1>SNOMED CT - OVERSETTELSESAPP</h1>
         </header>
 
         <article>
           <div className="row">
-            <div className="row col-md-12">
-            </div>
+            <div className="row col-md-12"></div>
           </div>
 
           <div className="container">
-
             <div className="row">
-
               <div className="form-group col-md-6">
                 <EnvironmentComponent
                   environmentFromChildToParent={this.callbackEnvironmentHandler}
                 />
                 Velg environment
               </div>
-
             </div>
 
             <div className="row">
-
               <div className="form-group col-md-6">
                 <BranchComponentTranslations
                   branchFromChildToParent={this.callbackBranchHandler}
@@ -294,10 +295,7 @@ export const TranslationInterface = class TranslationInterface extends React.Com
                 </div>
                 SNOMED CT-ID til begrepet du vil oversette
               </div>
-
             </div>
-
-           
 
             <div className="row">
               <div className="form-group col-md-12">
@@ -323,7 +321,6 @@ export const TranslationInterface = class TranslationInterface extends React.Com
                   </div>
                 ) : null}
               </div>
-
             </div>
 
             <div className="row">
@@ -335,7 +332,9 @@ export const TranslationInterface = class TranslationInterface extends React.Com
 
               <div className="form-group col-md-6">
                 <AcceptabilityStatusComponent
-                  acceptabilityStatusFromChildToParent={this.callbackAcceptabilityStatusHandler}
+                  acceptabilityStatusFromChildToParent={
+                    this.callbackAcceptabilityStatusHandler
+                  }
                 />
               </div>
             </div>
@@ -351,23 +350,17 @@ export const TranslationInterface = class TranslationInterface extends React.Com
               <div className="form-group col-md-6 flex-align-center">
                 {/* <div className="row"> */}
 
-                    <button 
-                      onClick={this.POSThandler}>
-                        Post
-                    </button>
+                <button onClick={this.POSThandler}>Post</button>
 
-                    <span className="spinner-container">
-                      {this.state.showSpinner ? 
-                        <Spinner color="success" /> 
-                        : null}
-                    </span>
+                <span className="spinner-container">
+                  {this.state.showSpinner ? <Spinner color="success" /> : null}
+                </span>
 
-                  {/* </div> */}
+                {/* </div> */}
               </div>
             </div>
-
           </div>
-          </article>
+        </article>
       </div>
     );
   }
