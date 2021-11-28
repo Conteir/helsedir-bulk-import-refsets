@@ -8,7 +8,7 @@ import AcceptabilityStatusComponent from "./AcceptabilityStatusComponent";
 import RefsetIDComponent from "./RefsetIDComponent";
 import DescriptionRenderComponent from "./DescriptionRenderComponent";
 import EnvironmentComponent from "./EnvironmentComponent";
-import { proxy } from "../config";
+//import { proxy } from "../config";
 
 export const TranslationInterface = class TranslationInterface extends React.Component {
   constructor(props) {
