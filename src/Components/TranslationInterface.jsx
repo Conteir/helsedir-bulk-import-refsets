@@ -30,8 +30,8 @@ export const TranslationInterface = class TranslationInterface extends React.Com
     };
   }
 
-  checkPreffered = (refsetID, typeSynonim) => {
-    if (typeSynonim === "PREFERRED" && this.state?.preferredRefsets[refsetID]) {
+  checkPreffered = (refsetID, acceptabilityStatusFromTheInput) => {
+    if (acceptabilityStatusFromTheInput === "PREFERRED" && this.state?.preferredRefsets[refsetID]) {
       console.log(
         "PREFERRED term for this REFSET already exists in description: " +
           this.state.preferredRefsets[refsetID] +
@@ -169,8 +169,8 @@ export const TranslationInterface = class TranslationInterface extends React.Com
     let data = this.state.data;
 
     console.log(
-      "this.state.typeSynonimFromTheInput",
-      this.state.typeSynonimFromTheInput
+      "this.state.acceptabilityStatusFromTheInputFromTheInput",
+      this.state.acceptabilityStatusFromTheInput
     );
 
     data.descriptions.push(member);
@@ -301,14 +301,14 @@ export const TranslationInterface = class TranslationInterface extends React.Com
               <div className="form-group col-md-12">
                 {this.state.showContent ? (
                   <div className="popup">
-                    <div className="header">
-                      <span>Termer</span>
-                      <span
+                    <div className="frame">
+                      <span><h2>Termer</h2></span>
+                      {/* <span
                         className="popup-close"
                         onClick={() => this.setState({ showContent: false })}
                       >
                         X
-                      </span>
+                      </span> */}
                     </div>
 
                     <div className="content">
@@ -351,7 +351,9 @@ export const TranslationInterface = class TranslationInterface extends React.Com
                 {/* <div className="row"> */}
 
                 <button onClick={this.POSThandler}>Post</button>
+              </div>
 
+              <div className="form-group col-md-6 flex-align-center">
                 <span className="spinner-container">
                   {this.state.showSpinner ? <Spinner color="success" /> : null}
                 </span>

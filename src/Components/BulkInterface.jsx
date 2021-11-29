@@ -375,7 +375,7 @@ export const BulkInterface = class BulkInterface extends React.Component {
                       <div>
                         <button 
                           onClick={() => this.deleteMember(item)} 
-                          className={'secondary'}
+                          className={'warning'}
                           >
                               <b>Fjern</b>
                         </button>

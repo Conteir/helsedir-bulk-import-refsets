@@ -1,4 +1,6 @@
 import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../index.css";
 
 export const DescriptionRenderComponent = class DescriptionRenderComponent extends React.Component {
     constructor(props) {
@@ -39,7 +41,7 @@ export const DescriptionRenderComponent = class DescriptionRenderComponent exten
                                     {descr?.active === true ?  
                                             (<div className="row">
                                                 <div className="col-md-10">
-                                                    <span>{index}</span><span>{". "}</span>
+                                                    <span>{index+1}</span><span>{". "}</span>
                                                     <span>{descr.term}</span><span>{" - "}</span> 
                                                     <span>{descr.type}</span><span>{" - "}</span> {/** TO DO: SORT BY THIS FIELD */}
                                                     <span>{descr.lang.toUpperCase()}</span><span>{" - "}</span>
@@ -63,16 +65,16 @@ export const DescriptionRenderComponent = class DescriptionRenderComponent exten
                                                     <div>
                                                         <button 
                                                             onClick={() => this.props.deleteDescription(descr)} 
-                                                            className={'secondary'}
+                                                            className={'warning'}
                                                             >
-                                                                <b>Fjern</b>
+                                                                <b>&nbsp;&nbsp;&nbsp;Fjern&nbsp;&nbsp;&nbsp;</b>
                                                         </button>
                                                     </div>
 
                                                     <div>
                                                         <button 
                                                             onClick={() => this.props.updateTerm(descr)} 
-                                                            className={'update'}
+                                                            className={'secondary'}
                                                             >
                                                                 <b>Oppdater</b>
                                                         </button>

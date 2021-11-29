@@ -215,3 +215,26 @@ div.spinner-border {
   color: hsl(157deg 52% 30%);
   box-shadow: 0px 0px 5px 0px hsl(0deg 0% 33%);
 } */
+
+/* Temporary */
+
+button {
+  color: white;
+  background-color: #3ec28f;
+  border: none;
+  display: inline-block;
+  padding: 15px 25px;
+  text-align: center;
+  border-radius: 8px !important;
+}
+
+button.secondary {
+  font-size: 12px;
+  padding: 5px 5px;
+}
+
+button.warning {
+  font-size: 12px;
+  padding: 5px 5px;
+  background-color: #c2473e;
+}
