@@ -16,6 +16,8 @@ export const branches = [
     id: "PROD",
   },
 ];
+export const proxy =
+  "https://belarussian.netlify.app/.netlify/functions/proxy/";
 
 export const environments = [
   {
@@ -26,9 +28,11 @@ export const environments = [
     title: "seabreeze (TEST)",
     urlPart: "https://seabreeze.conteir.no",
   },
+  {
+    title: "seabreeze (proxy)",
+    urlPart: proxy,
+  },
 ];
-export const proxy =
-  "https://belarussian.netlify.app/.netlify/functions/proxy/";
 
 // Production refsets
 export const refsetsProd = [
