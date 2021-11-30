@@ -298,69 +298,88 @@ export const TranslationInterface = class TranslationInterface extends React.Com
             </div>
 
             <div className="row">
+
               <div className="form-group col-md-12">
                 {this.state.showContent ? (
-                  <div className="popup">
-                    <div className="frame">
-                      <span><h2>Termer</h2></span>
-                      {/* <span
-                        className="popup-close"
-                        onClick={() => this.setState({ showContent: false })}
-                      >
-                        X
-                      </span> */}
-                    </div>
 
-                    <div className="content">
-                      <DescriptionRenderComponent
-                        renderDescriptionsData={this.state.data}
-                        deleteDescription={this.deleteDescriptionCallback}
-                        updateTerm={this.updateTermCallback}
-                      />{" "}
+                  <div className="form-group ">
+
+
+                    <div className="form-group ">
+                      <div className="popup">
+                        <div className="frame">
+                          <span><h2>Termer</h2></span>
+                          {/* <span
+                            className="popup-close"
+                            onClick={() => this.setState({ showContent: false })}
+                          >
+                            X
+                          </span> */}
+                        </div>
+
+                        <div className="content">
+                          <DescriptionRenderComponent
+                            renderDescriptionsData={this.state.data}
+                            deleteDescription={this.deleteDescriptionCallback}
+                            updateTerm={this.updateTermCallback}
+                          />{" "}
+                        </div>
+                      </div>
                     </div>
+                  
+                
+
+                      <div className="form-group">
+                        {/* Hide from here: */}
+                        <div className="row">
+                          <div className="form-group col-md-6">
+                            <RefsetIDComponent
+                              refsetIDFromChildToParent={this.callbackRefsetIDHandler}
+                            />
+                          </div>
+
+                          <div className="form-group col-md-6">
+                            <AcceptabilityStatusComponent
+                              acceptabilityStatusFromChildToParent={
+                                this.callbackAcceptabilityStatusHandler
+                              }
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="row">
+                        <div className="form-group col-md-6">
+                          <NewTermComponent
+                            placeholder="Ny oversettelse"
+                            termFromChildToParent={this.callbackTermHandler}
+                          />
+                        </div>
+
+                        <div className="form-group col-md-6 flex-align-center">
+                          <button onClick={this.POSThandler}>Post</button>
+                        </div>
+
+                        <div className="form-group col-md-6 flex-align-center">
+                          <span className="spinner-container">
+                            {this.state.showSpinner ? <Spinner color="success" /> : null}
+                          </span>
+                        </div>
+
+                      </div>
+                      {/* until here */}
+
+
+                  
                   </div>
+
+                
                 ) : null}
               </div>
+
             </div>
 
-            <div className="row">
-              <div className="form-group col-md-6">
-                <RefsetIDComponent
-                  refsetIDFromChildToParent={this.callbackRefsetIDHandler}
-                />
-              </div>
-
-              <div className="form-group col-md-6">
-                <AcceptabilityStatusComponent
-                  acceptabilityStatusFromChildToParent={
-                    this.callbackAcceptabilityStatusHandler
-                  }
-                />
-              </div>
-            </div>
-
-            <div className="row">
-              <div className="form-group col-md-6">
-                <NewTermComponent
-                  placeholder="Ny oversettelse"
-                  termFromChildToParent={this.callbackTermHandler}
-                />
-              </div>
-
-              <div className="form-group col-md-6 flex-align-center">
-                {/* <div className="row"> */}
-
-                <button onClick={this.POSThandler}>Post</button>
-              </div>
-
-              <div className="form-group col-md-6 flex-align-center">
-                <span className="spinner-container">
-                  {this.state.showSpinner ? <Spinner color="success" /> : null}
-                </span>
-
-                {/* </div> */}
-              </div>
-            </div>
+           
           </div>
         </article>
       </div>

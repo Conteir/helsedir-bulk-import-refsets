@@ -80,6 +80,9 @@ export const BulkInterface = class BulkInterface extends React.Component {
       fetch(getMembersRequestUrl, parameters)
         .then((response) => response.json())
         .then((dataWithMembers) => {
+          if (dataWithMembers === undefined) {
+            this.setState({showSpinner: false});
+          }
           console.log("dataWithMembers", dataWithMembers);
           // Getting only correct members from the serverx:
           // Filter out without referencedComponent OR fsn
