@@ -28,7 +28,7 @@ export const environments = [
     urlPart: "https://seabreeze.conteir.no",
   },
   {
-    title: "seabreeze (proxy)",
+    title: "snowstorm (proxy)",
     urlPart: proxy,
   },
 ];
