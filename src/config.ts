@@ -20,16 +20,12 @@ export const proxy = "https://belarussian.netlify.app/.netlify/functions/proxy";
 
 export const environments = [
   {
-    title: "snowstorm (PRODUCTION)",
-    urlPart: "https://snowstorm.conteir.no",
+    title: "snowstorm (production)",
+    urlPart: proxy,
   },
   {
     title: "seabreeze (TEST)",
     urlPart: "https://seabreeze.conteir.no",
-  },
-  {
-    title: "snowstorm (proxy)",
-    urlPart: proxy,
   },
 ];
 
