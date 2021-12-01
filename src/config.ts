@@ -16,7 +16,8 @@ export const branches = [
     id: "PROD",
   },
 ];
-export const proxy = "https://belarussian.netlify.app/.netlify/functions/proxy";
+export const proxy =
+  "https://hdir-refset-add.netlify.app/.netlify/functions/proxy";
 
 export const environments = [
   {
